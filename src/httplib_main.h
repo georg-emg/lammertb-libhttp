@@ -600,6 +600,7 @@ struct lh_ctx_t {
 	char *	ssl_ca_file;
 	char *	ssl_ca_path;
 	char *	ssl_certificate;
+	char *	ssl_private_key;
 	char *	ssl_cipher_list;
 	char *	throttle;
 	char *	url_rewrite_patterns;

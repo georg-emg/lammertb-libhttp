@@ -48,6 +48,10 @@ Here is the example of `libhttp.conf` file:
     document_root c:\www
     listening_ports 80,443s
     ssl_certificate c:\libhttp\ssl_cert.pem
+    ssl_private_key c:\libhttp\ssl_pkey.pem
+
+(If the private key is contained in the same file as the server certificate,
+you can omit the 'ssl_private_key' entry.)
 
 When a configuration file is used, additional command line arguments may
 override the configuration file settings.

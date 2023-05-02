@@ -9,6 +9,7 @@
 |**`host`**|`const char *`|The hostname or IP address to connect to|
 |**`port`**|`int`|The port on the server|
 |**`client_cert`**|`const char *`|Pointer to client certificate|
+|**`client_private_key`**|`const char *`|Pointer to client private key, or NULL to use certificate file|
 |**`server_cert`**|`const char *`|Pointer to a server certificate|
 
 ### Description

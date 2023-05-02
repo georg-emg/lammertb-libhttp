@@ -349,6 +349,7 @@ struct httplib_client_options {
 	const char *host;
 	int port;
 	const char *client_cert;
+	const char *client_private_key;
 	const char *server_cert;
 	/* TODO: add more data */
 };

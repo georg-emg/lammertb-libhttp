@@ -132,7 +132,7 @@ const char *			XX_httplib_ssl_error( void );
 void				XX_httplib_ssl_get_client_cert_info( struct lh_con_t *conn );
 long				XX_httplib_ssl_get_protocol( int version_id );
 void				XX_httplib_ssl_locking_callback( int mode, int mutex_num, const char *file, int line );
-int				XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *pem );
+int				XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *cert, const char *key );
 int				XX_httplib_sslize( struct lh_ctx_t *ctx, struct lh_con_t *conn, SSL_CTX *s, int (*func)(SSL *) );
 void				XX_httplib_tls_dtor( void *key );
 void				XX_httplib_uninitialize_ssl( struct lh_ctx_t *ctx );

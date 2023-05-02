@@ -30,7 +30,14 @@ To serve only https use:
   listening_ports 443s
 </pre>
 
-Furthermore the SSL certificate file must be set:
+Furthermore the SSL certificate and private key files must be set:
+<pre>
+  ssl_certificate d:\libhttp\certificate\server.crt
+  ssl_private_key d:\libhttp\certificate\server.key
+</pre>
+
+If the SSL certificate and private key are contained
+in the same file, you can omit the 'ssl_private_key' entry:
 <pre>
   ssl_certificate d:\libhttp\certificate\server.pem
 </pre>
@@ -55,15 +62,10 @@ and "type" by "cat"):
   openssl rsa -in server.key.orig -out server.key
 
   openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
-
-  copy server.crt server.pem
-
-  type server.key >> server.pem
 </pre>
 
-The server.pem file created must contain a 'CERTIFICATE' section as well as a
-'RSA PRIVATE KEY' section. It should look like this (x represents BASE64
-encoded data):
+The server.crt file created must contain a 'CERTIFICATE' section. It should look
+like this (x represents BASE64 encoded data):
 
 <pre>
 -----BEGIN CERTIFICATE-----
@@ -81,7 +83,13 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 -----END CERTIFICATE-----
------BEGIN RSA PRIVATE KEY-----
+</pre>
+
+The server.key must contain a 'PRIVATE KEY' or 'RSA PRIVATE KEY' section. It should
+look like this (x represents BASE64 encoded data):
+
+<pre>
+-----BEGIN PRIVATE KEY-----
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -95,7 +103,15 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
------END RSA PRIVATE KEY-----
+-----END PRIVATE KEY-----
+</pre>
+
+If you which, you can combine the two files into a single file:
+
+<pre>
+  copy server.crt server.pem
+
+  type server.key >> server.pem
 </pre>
 
 
@@ -105,15 +121,20 @@ Including a certificate from a certificate authority
 LibHTTP requires one certificate file in PEM format.
 If you got multiple files from your certificate authority,
 you need to copy their content together into one file.
-Make sure the file has one section BEGIN RSA PRIVATE KEY /
-END RSA PRIVATE KEY, and at least one section
+Make sure the file has at least one section
 BEGIN CERTIFICATE / END CERTIFICATE.
-In case you received a file with a section
-BEGIN PRIVATE KEY / END PRIVATE KEY,
-you may get a suitable file by adding the letters RSA manually.
+
+LibHTTP supports a private key inside the certificate file,
+or in a separate file. Make sure the file has a section
+BEGIN PRIVATE KEY / END PRIVATE KEY, or a section
+BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY.
 
 Set the "ssl_certificate" configuration parameter to the
-file name (including path) of the resulting *.pem file.
+file name (including path) of the *.pem file containing
+the certificate. If the private key is in a separate file,
+Set the "ssl_private_key" configuration parameter to the
+file name (including path) of the *.pem file containing
+the private key.
 
 The file must look like the file in the section
 "Creating a self signed certificate", but it will have several
@@ -146,8 +167,8 @@ set_ssl_option: cannot open server.pem: error:PEM routines:*:PEM_read_bio:bad en
 </pre>
 These error messages indicate, that the format of the ssl_certificate file does
 not match the expectations of the SSL library. The PEM file must contain both,
-a 'CERTIFICATE' and a 'RSA PRIVATE KEY' section. It should be a strict ASCII
-file without byte-order marks.
+a 'CERTIFICATE' and a 'PRIVATE KEY' or a 'RSA PRIVATE KEY' section. It should
+be a strict ASCII file without byte-order marks.
 The instructions above may be used to create a valid ssl_certificate file.
 
 

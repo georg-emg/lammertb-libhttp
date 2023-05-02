@@ -65,6 +65,7 @@ bool XX_httplib_init_options( struct lh_ctx_t *ctx ) {
 	ctx->ssl_ca_file                 = NULL;
 	ctx->ssl_ca_path                 = NULL;
 	ctx->ssl_certificate             = NULL;
+	ctx->ssl_private_key             = NULL;
 	ctx->ssl_cipher_list             = NULL;
 	ctx->ssl_protocol_version        = 0;
 	ctx->ssl_short_trust             = false;

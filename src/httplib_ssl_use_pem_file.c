@@ -31,19 +31,22 @@
 #include "httplib_ssl.h"
 
 /*
- * int XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *pem );
+ * int XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *cert, const char *key );
  *
  * The function XX_httplib_ssl_use_pem_file() tries to use a certificate which
- * is passed as a parameter with the filename of the certificate.
+ * is passed as a parameter with the filename of the certificate. If key is not NULL,
+ * it is used as the private key file
  */
 
-int XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *pem ) {
+int XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *cert, const char *key ) {
 
-	if ( ctx == NULL  ||  pem == NULL ) return 0;
+	if ( ctx == NULL  ||  cert == NULL ) return 0;
 
-	if ( SSL_CTX_use_certificate_file( ctx->ssl_ctx, pem, 1 ) == 0 ) {
+	if ( key == NULL ) key = cert;
 
-		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot open certificate file %s: %s", __func__, pem, XX_httplib_ssl_error() );
+	if ( SSL_CTX_use_certificate_file( ctx->ssl_ctx, cert, 1 ) == 0 ) {
+
+		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot open certificate file %s: %s", __func__, cert, XX_httplib_ssl_error() );
 		return 0;
 	}
 
@@ -51,21 +54,21 @@ int XX_httplib_ssl_use_pem_file( struct lh_ctx_t *ctx, const char *pem ) {
 	 * could use SSL_CTX_set_default_passwd_cb_userdata
 	 */
 
-	if ( SSL_CTX_use_PrivateKey_file( ctx->ssl_ctx, pem, 1 ) == 0 ) {
+	if ( SSL_CTX_use_PrivateKey_file( ctx->ssl_ctx, key, 1 ) == 0 ) {
 
-		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot open private key file %s: %s", __func__, pem, XX_httplib_ssl_error() );
+		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot open private key file %s: %s", __func__, key, XX_httplib_ssl_error() );
 		return 0;
 	}
 
 	if ( SSL_CTX_check_private_key( ctx->ssl_ctx ) == 0 ) {
 
-		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: certificate and private key do not match: %s", __func__, pem );
+		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: certificate and private key do not match: %s", __func__, key );
 		return 0;
 	}
 
-	if ( SSL_CTX_use_certificate_chain_file( ctx->ssl_ctx, pem ) == 0 ) {
+	if ( SSL_CTX_use_certificate_chain_file( ctx->ssl_ctx, cert ) == 0 ) {
 
-		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot use certificate chain file %s: %s", __func__, pem, XX_httplib_ssl_error() );
+		httplib_cry( LH_DEBUG_ERROR, ctx, NULL, "%s: cannot use certificate chain file %s: %s", __func__, cert, XX_httplib_ssl_error() );
 		return 0;
 	}
 

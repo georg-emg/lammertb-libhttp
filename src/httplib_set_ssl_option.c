@@ -41,7 +41,7 @@ static void *ssllib_dll_handle;    /* Store the ssl library handle. */
 
 bool XX_httplib_set_ssl_option( struct lh_ctx_t *ctx ) {
 
-	const char *pem;
+	const char *cert, *key;
 	int callback_ret;
 	time_t now_rt;
 	struct timespec now_mt;
@@ -56,9 +56,10 @@ bool XX_httplib_set_ssl_option( struct lh_ctx_t *ctx ) {
 	if ( ctx == NULL ) return false;
 
 	now_rt = time( NULL );
-	pem    = ctx->ssl_certificate;
+	cert    = ctx->ssl_certificate;
+	key     = ctx->ssl_private_key;
 
-	if ( pem == NULL  &&  ctx->callbacks.init_ssl == NULL ) return true;
+	if ( cert == NULL  &&  ctx->callbacks.init_ssl == NULL ) return true;
 
 	if ( ! XX_httplib_initialize_ssl( ctx ) ) return false;
 
@@ -105,7 +106,7 @@ bool XX_httplib_set_ssl_option( struct lh_ctx_t *ctx ) {
 
 	if ( callback_ret > 0 ) {
 
-		if ( pem != NULL ) SSL_CTX_use_certificate_chain_file( ctx->ssl_ctx, pem );
+		if ( cert != NULL ) SSL_CTX_use_certificate_chain_file( ctx->ssl_ctx, cert );
 		return true;
 	}
 
@@ -122,7 +123,7 @@ bool XX_httplib_set_ssl_option( struct lh_ctx_t *ctx ) {
 
 	SSL_CTX_set_session_id_context( ctx->ssl_ctx, (const unsigned char *)&ssl_context_id, sizeof(ssl_context_id) );
 
-	if ( pem != NULL  &&  ! XX_httplib_ssl_use_pem_file( ctx, pem ) ) return false;
+	if ( cert != NULL  &&  ! XX_httplib_ssl_use_pem_file( ctx, cert, key ) ) return false;
 
 	if ( ctx->ssl_verify_peer ) {
 

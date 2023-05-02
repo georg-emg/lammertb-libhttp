@@ -70,6 +70,7 @@ const char *httplib_get_option( const struct lh_ctx_t *ctx, const char *name, ch
 	if ( ! httplib_strcasecmp( name, "ssl_ca_file"                 ) ) return (ctx == NULL) ? buffer : store_str(  buffer, buflen, ctx->ssl_ca_file                 );
 	if ( ! httplib_strcasecmp( name, "ssl_ca_path"                 ) ) return (ctx == NULL) ? buffer : store_str(  buffer, buflen, ctx->ssl_ca_path                 );
 	if ( ! httplib_strcasecmp( name, "ssl_certificate"             ) ) return (ctx == NULL) ? buffer : store_str(  buffer, buflen, ctx->ssl_certificate             );
+	if ( ! httplib_strcasecmp( name, "ssl_private_key"             ) ) return (ctx == NULL) ? buffer : store_str(  buffer, buflen, ctx->ssl_private_key             );
 	if ( ! httplib_strcasecmp( name, "ssl_cipher_list"             ) ) return (ctx == NULL) ? buffer : store_str(  buffer, buflen, ctx->ssl_cipher_list             );
 	if ( ! httplib_strcasecmp( name, "ssl_protocol_version"        ) ) return (ctx == NULL) ? buffer : store_int(  buffer, buflen, ctx->ssl_protocol_version        );
 	if ( ! httplib_strcasecmp( name, "ssl_short_trust"             ) ) return (ctx == NULL) ? buffer : store_bool( buffer, buflen, ctx->ssl_short_trust             );

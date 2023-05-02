@@ -133,7 +133,7 @@ static struct lh_con_t *httplib_connect_client_impl( struct lh_ctx_t *ctx, const
 
 			if ( client_options->client_cert ) {
 
-				if ( ! XX_httplib_ssl_use_pem_file( ctx, client_options->client_cert ) ) {
+				if ( ! XX_httplib_ssl_use_pem_file( ctx, client_options->client_cert, client_options->client_private_key ) ) {
 
 					httplib_cry( LH_DEBUG_ERROR, ctx, conn, "%s: can not use SSL client certificate", __func__ );
 					SSL_CTX_free( conn->client_ssl_ctx );

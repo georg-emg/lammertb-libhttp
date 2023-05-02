@@ -46,16 +46,17 @@ int XX_httplib_refresh_trust( struct lh_ctx_t *ctx, struct lh_con_t *conn ) {
 	volatile int *p_reload_lock;
 	struct stat cert_buf;
 	long int t;
-	char *pem;
+	char *cert, *key;
 
 	if ( ctx == NULL  ||  conn == NULL ) return 0;
 
 	p_reload_lock = & reload_lock;
-	pem           = ctx->ssl_certificate;
+	cert           = ctx->ssl_certificate;
+	key            = ctx->ssl_private_key;
 
-	if ( pem == NULL  &&  ctx->callbacks.init_ssl == NULL ) return 0;
+	if ( cert == NULL  &&  ctx->callbacks.init_ssl == NULL ) return 0;
 
-	if ( stat( pem, &cert_buf ) != -1 ) t = (long int)cert_buf.st_mtime;
+	if ( stat( cert, &cert_buf ) != -1 ) t = (long int)cert_buf.st_mtime;
 	else                                t = data_check;
 
 	if ( data_check != t ) {
@@ -74,7 +75,7 @@ int XX_httplib_refresh_trust( struct lh_ctx_t *ctx, struct lh_con_t *conn ) {
 
 		if ( httplib_atomic_inc( p_reload_lock ) == 1 ) {
 
-			if ( XX_httplib_ssl_use_pem_file( ctx, pem ) == 0 ) return 0;
+			if ( XX_httplib_ssl_use_pem_file( ctx, cert, key ) == 0 ) return 0;
 			*p_reload_lock = 0;
 		}
 	}

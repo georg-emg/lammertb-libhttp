@@ -719,6 +719,7 @@ main(int argc, char *argv[])
 #endif
 #ifndef NO_SSL
 	    "ssl_certificate",
+	    "ssl_private_key",
 	    "../../resources/cert/server.pem",
 	    "ssl_protocol_version",
 	    "3",

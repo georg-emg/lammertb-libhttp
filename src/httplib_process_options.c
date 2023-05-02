@@ -76,6 +76,7 @@ bool XX_httplib_process_options( struct lh_ctx_t *ctx, const struct lh_opt_t *op
 		if ( check_file( ctx, options, "ssl_ca_file",                 & ctx->ssl_ca_file                             ) ) return true;
 		if ( check_dir(  ctx, options, "ssl_ca_path",                 & ctx->ssl_ca_path                             ) ) return true;
 		if ( check_file( ctx, options, "ssl_certificate",             & ctx->ssl_certificate                         ) ) return true;
+		if ( check_file( ctx, options, "ssl_private_key",             & ctx->ssl_private_key                         ) ) return true;
 		if ( check_str(  ctx, options, "ssl_cipher_list",             & ctx->ssl_cipher_list                         ) ) return true;
 		if ( check_int(  ctx, options, "ssl_protocol_version",        & ctx->ssl_protocol_version,        0, 4       ) ) return true;
 		if ( check_bool( ctx, options, "ssl_short_trust",             & ctx->ssl_short_trust                         ) ) return true;
